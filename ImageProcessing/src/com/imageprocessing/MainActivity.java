@@ -1,8 +1,11 @@
 package com.imageprocessing;
+import java.io.File;
+
 import org.opencv.android.BaseLoaderCallback;  
 import org.opencv.android.LoaderCallbackInterface;  
 import org.opencv.android.OpenCVLoader;  
 import android.os.Bundle;  
+import android.os.Environment;
 import android.app.Activity;  
 import android.graphics.Bitmap;  
 import android.graphics.BitmapFactory;  
@@ -21,10 +24,15 @@ public class MainActivity extends Activity implements OnClickListener{
         public void onManagerConnected(int status) {  
             switch (status) {  
                 case LoaderCallbackInterface.SUCCESS:{  
-                    System.loadLibrary("ImageProc");  } break;  
+                    System.loadLibrary("ha_facereco");  
+                    
+                    initSDK();
+                    } 
+                break;  
                 default:{  
                     super.onManagerConnected(status);  
-                } break; }}};  
+                } break; }}}; 
+                
     @Override  
     public void onCreate(Bundle savedInstanceState) {  
         super.onCreate(savedInstanceState);  
@@ -37,17 +45,30 @@ public class MainActivity extends Activity implements OnClickListener{
     }  
     @Override  
     public void onClick(View v) {  
-        int w = bmp.getWidth();  
-        int h = bmp.getHeight();  
-        int[] pixels = new int[w*h];       
-        bmp.getPixels(pixels, 0, w, 0, 0, w, h);  
-        int[] resultInt = ImageProc.grayProc(pixels, w, h);  
-        Bitmap resultImg = Bitmap.createBitmap(w, h, Config.ARGB_8888);  
-        resultImg.setPixels(resultInt, 0, w, 0, 0, w, h);  
-        imageView.setImageBitmap(resultImg);}  
+//        int w = bmp.getWidth();  
+//        int h = bmp.getHeight();  
+//        int[] pixels = new int[w*h];       
+//        bmp.getPixels(pixels, 0, w, 0, 0, w, h);  
+//        int[] resultInt = ImageProc.grayProc(pixels, w, h);  
+//        Bitmap resultImg = Bitmap.createBitmap(w, h, Config.ARGB_8888);  
+//        resultImg.setPixels(resultInt, 0, w, 0, 0, w, h);  
+//        imageView.setImageBitmap(resultImg);
+    	File pathFile = Environment.getExternalStorageDirectory();
+    	String path1 = pathFile.getAbsolutePath() + "/face/1.jpg";
+    	String path2 = pathFile.getAbsolutePath() + "/face/2.jpg";
+
+        ImageProc.compare2pictures(path1, path2);
+    }  
     @Override  
     public void onResume(){  
         super.onResume();
         OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this, mLoaderCallback);  
     }  
+    
+    
+    public void initSDK(){
+    	File pathFile = Environment.getExternalStorageDirectory();
+    	String path = pathFile.getAbsolutePath() + "/bin";
+    	ImageProc.initLibrary(path);
+    }
 }  
