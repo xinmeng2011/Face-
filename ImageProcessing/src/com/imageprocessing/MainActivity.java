@@ -1,6 +1,8 @@
 package com.imageprocessing;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Date;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
@@ -16,6 +18,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -79,6 +82,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			if ("".equals(path1) || "".equals(path2)) {
 				Toast.makeText(this, "请选择您需要的对比图片", Toast.LENGTH_SHORT).show();
 			} else {
+				Date   startDate   =   new   Date(System.currentTimeMillis());
 				int retid = ImageProc.compare2pictures(path1, path2);
 				if (retid == 0) {
 					Toast.makeText(this, "请选择含有人脸的图片进行对比", Toast.LENGTH_SHORT)
@@ -87,9 +91,15 @@ public class MainActivity extends Activity implements OnClickListener {
 					Toast.makeText(this, "只有两张图片都只有一个人脸的时候才会进行对比哦",
 							Toast.LENGTH_SHORT).show();
 				} else {
+					Date   endDate   =   new   Date(System.currentTimeMillis());
+					long diff = endDate.getTime() - startDate.getTime();
+					Log.e("oooooooooo", "Time= "+diff);
 					mResultTV.setText("对比结果："
 							+ ImageProc.comparepictures(path1, path2) * 100
 							+ "%");
+					Date   endDate1   =   new   Date(System.currentTimeMillis());
+					long diff1 = endDate1.getTime() - startDate.getTime();
+					Log.e("oooooooooo", "Time= "+diff1);
 				}
 			}
 			break;
