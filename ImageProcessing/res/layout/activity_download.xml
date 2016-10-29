@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content" />
+    <TextView 
+        android:id="@+id/down_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="正在配置环境,请稍等……"
+        android:textSize="22sp"
+        android:layout_below="@+id/progressBar1"
+        android:layout_centerHorizontal="true"
+        />
+	<Button 
+	    android:id="@+id/install_btn"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:text="安装  OpenCV Manager"
+	    android:layout_alignParentBottom="true"
+	    />
+</RelativeLayout>
