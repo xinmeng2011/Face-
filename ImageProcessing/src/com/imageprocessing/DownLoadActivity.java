@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 public class DownLoadActivity extends Activity {
 	
@@ -23,6 +24,7 @@ public class DownLoadActivity extends Activity {
 	private String[] pathName = {"feats.dat","seeta_fa_v1.1.bin","seeta_fd_frontal_v1.0.bin","seeta_fr_v1.0.bin","opencv_manager.apk"};
 	
 	private Button mInstall;
+	private ProgressBar mpb;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,17 +32,21 @@ public class DownLoadActivity extends Activity {
 		setContentView(R.layout.activity_download);
 		
 		mInstall = (Button) this.findViewById(R.id.install_btn);
-		
+		mpb = (ProgressBar) this.findViewById(R.id.progressBar1);
 		BASE = Environment.getExternalStorageDirectory().getAbsolutePath()+ "/bin";
 		File path = new File(BASE);
 		if (!path.exists()) {// 目录存在返回false 
 			path.mkdirs();// 创建一个目录 
 		} 
-		
-		for (int i = 0; i < pathName.length; i++) {
-			assetsDataToSD(BASE+"/"+pathName[i],pathName[i]);
+		File file = new File(BASE + "/" + pathName[0]);
+		if(!file.exists()){
+			mpb.setVisibility(View.VISIBLE);
+			for (int i = 0; i < pathName.length; i++) {
+				assetsDataToSD(BASE+"/"+pathName[i],pathName[i]);
+			}
 		}
-		
+		mpb.setVisibility(View.GONE);
+
 		mInstall.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
