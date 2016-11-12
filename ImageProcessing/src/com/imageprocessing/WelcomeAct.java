@@ -16,7 +16,6 @@ public class WelcomeAct extends Activity {
 	private static final int GO_HOME = 1000;
 	private static final int GO_GUIDE = 1001;
 	
-	
 	private Handler mHandler = new Handler(){
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
@@ -42,6 +41,7 @@ public class WelcomeAct extends Activity {
 	private void init(){
 		SharedPreferences perPreferences = getSharedPreferences("jike", MODE_PRIVATE);
 		isFirstIn = perPreferences.getBoolean("isFirstIn", true);
+		//判断文件是否存在
 		if (!isFirstIn) {
 			mHandler.sendEmptyMessageDelayed(GO_HOME, TIME);
 		}else{

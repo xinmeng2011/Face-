@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -20,32 +19,41 @@ import android.widget.ProgressBar;
 
 public class DownLoadActivity extends Activity {
 	
-	private String BASE = "";
-	private String[] pathName = {"feats.dat","seeta_fa_v1.1.bin","seeta_fd_frontal_v1.0.bin","seeta_fr_v1.0.bin","opencv_manager.apk"};
-	
 	private Button mInstall;
 	private ProgressBar mpb;
+	
+	public static String BASE = Environment.getExternalStorageDirectory().getAbsolutePath()+ "/bin";
+	public static String[] pathName = {"feats.dat","seeta_fa_v1.1.bin","seeta_fd_frontal_v1.0.bin","seeta_fr_v1.0.bin","opencv_manager.apk"};
+	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_download);
 		
+		initView();
+	}
+	private void initView() {
 		mInstall = (Button) this.findViewById(R.id.install_btn);
 		mpb = (ProgressBar) this.findViewById(R.id.progressBar1);
-		BASE = Environment.getExternalStorageDirectory().getAbsolutePath()+ "/bin";
+		//BASE = Environment.getExternalStorageDirectory().getAbsolutePath()+ "/bin";
 		File path = new File(BASE);
 		if (!path.exists()) {// 目录存在返回false 
 			path.mkdirs();// 创建一个目录 
 		} 
 		File file = new File(BASE + "/" + pathName[0]);
-		if(!file.exists()){
+		File file1 = new File(BASE + "/" + pathName[1]);
+		File file2 = new File(BASE + "/" + pathName[2]);
+		File file3 = new File(BASE + "/" + pathName[3]);
+		File file4 = new File(BASE + "/" + pathName[4]);
+		if(!file.exists() && !file1.exists() && !file2.exists() && !file3.exists() || !file4.exists()){
 			mpb.setVisibility(View.VISIBLE);
 			for (int i = 0; i < pathName.length; i++) {
 				assetsDataToSD(BASE+"/"+pathName[i],pathName[i]);
 			}
 		}
-		mpb.setVisibility(View.GONE);
+		mpb.setVisibility(View.INVISIBLE);
 
 		mInstall.setOnClickListener(new OnClickListener() {
 			@Override
@@ -58,14 +66,18 @@ public class DownLoadActivity extends Activity {
 					// 在外部Activity调用者看来，不需要在意太多内部实现，只需要传入一个url跟一个context即可  
 			        AutoInstall.setUrl(Environment.getExternalStorageDirectory() + "/bin/opencv_manager.apk");  
 			        AutoInstall.install(DownLoadActivity.this);  
-					if(isAppInstalled("org.opencv.engine")){
-						mInstall.setText("点击我，开启你的旅行吧！");
-					}
-					
 				}
 			}
 		});
 	}
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if(isAppInstalled("org.opencv.engine")){
+			mInstall.setText("点击我，开启你的旅行吧！");
+		}
+	}
+	
 	
 	private boolean isAppInstalled(String uri) {
 		PackageManager pm = getPackageManager();
